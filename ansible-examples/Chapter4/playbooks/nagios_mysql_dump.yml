@@ -1,0 +1,14 @@
+---
+- name: mysql dump
+  hosts: web001
+  remote_user: ec2-user
+  gather_facts: no
+
+  tasks:
+    - name: Dumping mysql database
+      shell: mysqldump -u {{ lookup('env','DBUSER') }} -p{{ lookup('env','DBPASSWORD') }} ansible > ansible.sql
+
+    - name: Sending passive check to nagios
+      shell: echo -e "web001\tmysql dump\t0\tOK':' Dumped ansible mysql database" | /usr/sbin/send_nsca -H 10.47.137.69  -c  /etc/nagios/send_nsca.cfg
+      sudo: yes
+

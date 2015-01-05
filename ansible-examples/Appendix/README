@@ -1,0 +1,11 @@
+################################################################################
+
+Install role using ansible-galaxy -
+
+$ ansible-galaxy install geerlingguy.apache
+
+Running galaxy.yml -
+
+$ ansible-playbook -i hosts playbooks/galaxy.yml
+
+################################################################################

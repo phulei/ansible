@@ -1,0 +1,12 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Installing packages
+      yum: name={{ item }} state=latest
+      with_items:
+         - httpd
+         - mysql
+         - mysql-server
+      sudo: yes
+

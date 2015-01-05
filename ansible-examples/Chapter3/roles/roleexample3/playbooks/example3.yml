@@ -1,0 +1,11 @@
+---
+- hosts: host1
+  gather_facts: False
+  remote_user: vagrant
+
+  vars:
+    - service_name: "monit"
+    - service_state: "stopped"
+ 
+  tasks:
+    - include: tasks/manage_service.yml service_name="monit" service_state="stopped"

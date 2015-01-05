@@ -1,0 +1,35 @@
+################################################################################
+
+cloud_provision.yml -
+
+amazon ec2 instance:
+
+# Change the below variabels with proper values
+
+$ ansible-playbook -i hosts playbooks/cloud_provision.yml -e "group_id=sg-bddb8bd6 mykeypair=YOU_KEY_PAIR instance_type=t1.micro image=ami-bba18dd2 zone=us-east-1b region=us-east-1" --tags ec2
+
+digital ocean:
+
+$ ansible-playbook -i hosts playbooks/cloud_provision.yml --tags digital_ocean
+
+################################################################################
+
+docker install site.yml - 
+
+$ cd docker
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key site.yml
+
+################################################################################
+
+docker nginx install -
+$ cd docker
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key nginx_site.yml
+(nginx_site.yml is the site.yml shown in example in the book.)
+
+################################################################################
+
+hadoop_data_restart.yml -
+
+$ ansible-playbook -i ec2.py playbooks/hadoop_data_restart.yml -e "nodes=tag_name_hadoop-data"
+
+################################################################################

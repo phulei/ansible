@@ -1,0 +1,8 @@
+---
+  - name: install docker package
+    yum: name=docker state=present
+    sudo: yes
+
+  - name: enable docker service
+    service: name=docker enabled=yes state=started
+    sudo: yes

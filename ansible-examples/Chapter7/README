@@ -1,0 +1,37 @@
+################################################################################
+
+# You can find the below playbook under chapter7_1 directory
+db.yml -
+
+$ ansible-playbook -i inventory db.yml
+
+################################################################################
+
+# You can find the below playbook under chapter7_1 directory
+app_server.yml -
+
+$ ansible-playbook -i inventory app_server.yml
+
+################################################################################
+
+# You can find the below playbook under chapter7_2 directory
+app_server.yml -
+
+$ ansible-playbook -i inventory app_server.yml -e 'app_version=1'
+
+
+################################################################################
+
+update_tomcat.yml -
+
+# Update the tomcat_url, tomcat_version and tomcat_app value with the required version and path
+
+$ ansible-playbook -i hosts playbooks/update_tomcat.yml
+
+################################################################################
+
+ansible pull -
+
+$ ansible-pull -o -C master -d /opt/deployment -U https://github.com/madhurranjan/deployment.git -i localhost,
+
+################################################################################

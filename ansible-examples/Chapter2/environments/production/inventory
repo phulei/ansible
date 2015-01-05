@@ -1,0 +1,9 @@
+[web]
+192.168.33.30
+
+[db]
+192.168.33.31
+
+[servers:children]
+db
+web

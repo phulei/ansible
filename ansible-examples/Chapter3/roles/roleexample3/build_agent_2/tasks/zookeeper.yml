@@ -1,0 +1,17 @@
+---
+  - name: create zookeeper directory
+    file: dest=${zookeeper_base_directory} state=directory owner=root group=root
+
+  - name: download zookeeper
+    get_url: url=http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/zookeeper-3.4.5.tar.gz dest=${zookeeper_base_directory} thirsty=no
+
+  - name: untar zookeeper
+    shell: cd ${zookeeper_base_directory}; tar -zxvf ${zookeeper_software} creates=${zookeeper_base_directory}/${zookeeper_directory}
+    tags:
+      - untar
+
+  - name: setup zookeeper conf
+    template: src=zoo.conf dest=${zookeeper_base_directory}/${zookeeper_directory}/conf
+
+  - name: symlink zookeeper
+    file: src=${zookeeper_base_directory}/${zookeeper_directory} dest=${zookeeper_base_directory}/zookeeper owner=root group=root state=link

@@ -1,0 +1,8 @@
+---
+  - name: Run nginx docker container
+    docker: image=nginx command="nginx" hostname=nginx_container ports=80 count=3
+
+  - name: Display IP address and port mappings for docker container
+    debug: msg={{ inventory_hostname }}:{{ item['HostConfig']['PortBindings']['80/tcp'][0]['HostPort'] }}
+    with_items: docker_containers
+

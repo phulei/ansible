@@ -1,0 +1,16 @@
+---  
+-   hosts: host1
+    remote_user: ec2-user
+    tasks:
+
+      - name: Install httpd package
+        yum: name=httpd state=latest
+        sudo: yes
+       
+      - name: Starting httpd service
+        service: name=httpd state=started
+        sudo: yes
+
+      - name: Show how debug works
+        debug: msg={{ ansible_distribution }}
+

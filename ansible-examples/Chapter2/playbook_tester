@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: ./playbook_tester <name of playbook> "
+  exit
+fi
+
+echo "Testing playbook $1"
+
+cd $1
+if [[ `vagrant status | grep running` ]] ; then
+  vagrant provision 
+else 
+  vagrant up 
+fi
+rake serverspec

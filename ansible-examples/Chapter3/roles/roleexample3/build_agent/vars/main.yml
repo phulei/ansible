@@ -1,0 +1,14 @@
+#Ant related variable configurations
+ant_base_directory: /opt/
+ant_software: apache-ant-1.7.1.tar.gz
+ant_directory: apache-ant-1.7.1
+
+fileserver: 192.168.1.165
+jdk7: jdk-7u51-linux-x64.rpm
+jdk6: jdk-6u45-linux-amd64.rpm
+
+#maven variables
+maven_url: "http://192.168.1.165/apache-maven-3.0.5-bin.tar.gz"
+maven_software: apache-maven-3.0.5-bin.tar.gz
+maven_directory: apache-maven-3.0.5
+maven_base_directory: /opt/

@@ -1,0 +1,3 @@
+---
+- include: pre_requisites.yml
+- include: mysql_server.yml

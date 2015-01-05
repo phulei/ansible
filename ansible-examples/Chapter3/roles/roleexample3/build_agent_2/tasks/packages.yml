@@ -1,0 +1,11 @@
+---
+  - name: setup java jdk
+    command: rpm -i http://${fileserver}/${jdk7}
+    ignore_errors: True
+    tags: 
+      - packages
+   
+  - name: install rpm build 
+    yum: name=rpm-build state=latest
+    tags: 
+      - packages

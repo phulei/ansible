@@ -1,0 +1,6 @@
+---
+- hosts: db
+  user: ec2-user  
+  sudo: yes
+  roles: 
+    - db

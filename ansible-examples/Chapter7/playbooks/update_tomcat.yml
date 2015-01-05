@@ -1,0 +1,28 @@
+---  
+- name: Provisioning tomcat server
+  hosts: "all"
+  gather_facts: no
+  user: "ec2-user"
+  serial: 1
+  sudo: yes
+
+  pre_tasks:
+    - name: Stopping monit
+      service: name=monit state=stopped
+
+    - name: Adding iptables rule to block port 8080
+      shell: iptables -A INPUT ! -s 127.0.0.1 -p tcp -m tcp --dport 8080 -j DROP
+
+    - name: Saving iptables rule
+      shell: iptables-save
+
+  roles:
+    - { role: tomcat, tomcat_url: "http://www.us.apache.org/dist/tomcat/tomcat-7/v7.0.55/bin/apache-tomcat-7.0.55.tar.gz", tomcat_version: "7.0.55", tomcat_app: "https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war" }
+
+  post_tasks:
+    - name: Starting monit
+      service: name=monit state=started
+
+    - name: Flushing iptables rule
+      shell: iptables -F
+

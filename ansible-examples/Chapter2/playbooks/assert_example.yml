@@ -1,0 +1,11 @@
+---  
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - action: shell /bin/ls
+      register: list_files
+
+    - assert:
+        that:
+          - "'testfile.txt' in list_files.stdout_lines"
+

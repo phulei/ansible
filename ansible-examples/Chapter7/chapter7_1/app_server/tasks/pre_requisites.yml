@@ -1,0 +1,27 @@
+---
+- name : Check if epel.repo exists
+  stat: path=/etc/yum.repos.d/epel.repo
+  register: repo
+
+- name: Add epel yum repo
+  shell: rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+  when: repo.stat.exists != true
+
+- name: Install packages required
+  yum: pkg={{ item }} state=present
+  sudo: yes
+  with_items:
+    - git
+    - ruby-devel
+    - gcc
+    - libxml2-devel
+    - patch
+    - sqlite-devel
+    - mysql-devel
+    - gcc-c++
+
+- name: Install required system gems
+  gem: name={{ item }} state=present user_install=no
+  sudo: yes
+  with_items:
+    - bundler

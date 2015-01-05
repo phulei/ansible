@@ -1,0 +1,14 @@
+---
+- hosts: host1
+  gather_facts: False
+  remote_user: vagrant
+  vars:
+    port: 8080
+  tasks:
+    - name: Install httpd package
+      yum: name=httpd state=latest
+      sudo: yes
+
+    - name: Check httpd service
+      service: name=httpd state=started enabled=yes
+      sudo: yes

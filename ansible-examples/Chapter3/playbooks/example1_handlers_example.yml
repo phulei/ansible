@@ -1,0 +1,15 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Create a virtual host
+      template: src=httpd_test.conf_web dest=/etc/httpd/conf/test.conf mode=644 validate='httpd -t -f %s'
+      sudo: yes     
+      notify:
+        - restart httpd
+
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted
+      sudo: yes
+

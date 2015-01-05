@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+import pwd
+import sys
+import shlex
+import json
+
+class CheckUsers:
+    def __init__(self, user):
+        self.user = user
+
+    def check_users(self):
+        # Checking if user exists
+        uid = ""
+        gid = ""
+        try:
+            user = pwd.getpwnam(self.user)
+            success = True
+            ret_msg = "User %s exists" % self.user
+            uid = user.pw_uid
+            gid = user.pw_uid
+        except KeyError:
+            success = False
+            ret_msg = "User %s does not exists" % self.user
+        return success, ret_msg, uid, gid
+
+def main():
+    # Parsing argument file 
+    module = AnsibleModule(
+        argument_spec = dict(
+            user      = dict(required=True)
+        )
+    )
+    user = module.params.get("user")
+
+    chkusr = CheckUsers(user)
+    success, ret_msg, uid, gid = chkusr.check_users()
+
+    # Error handling and JSON return
+    if success:
+        module.exit_json(msg=ret_msg, uid=uid, gid=gid)
+    else:
+        module.fail_json(msg=ret_msg)
+
+
+from ansible.module_utils.basic import *
+main()
+

@@ -1,0 +1,76 @@
+---
+- name: Launching new hosts
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - include: digital_ocean_launch.yml tags=digital_ocean
+
+    - include: ec2_launch.yml tags=ec2
+
+
+- name: Updating new instance
+  hosts: launched
+  gather_facts: no
+  user: "{{ user }}"
+  sudo: yes
+  tags: digital_ocean,ec2
+
+  tasks:
+    - name: Updating hostname
+      hostname: name={{ instance_hostname }}
+
+    - name: Installing wget
+      yum: name=wget state=present
+
+    - name: Grouping hosts
+      group_by: key={{ instance_hostname }}
+
+    - name: Downloading CDH Repository
+      shell: wget http://archive.cloudera.com/cdh4/one-click-install/redhat/6/x86_64/cloudera-cdh-4-0.x86_64.rpm
+
+    - name: Installing CDH Repository
+      yum: name=cloudera-cdh-4-0.x86_64.rpm state=installed
+
+    - name: Adding Cloudera Public GPG Key to repository
+      shell: rpm --import http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera
+
+
+- name: Provisioning name node
+  hosts: hadoop-name*
+  user: "{{ user }}"
+  sudo: yes
+  tags: digital_ocean,ec2
+
+  tasks:
+    - name: Installing required packages
+      yum: name=hadoop-0.20-mapreduce-jobtracker,hadoop-hdfs-namenode,hadoop-hdfs-secondarynamenode state=present
+
+    - name: starting services
+      service: name={{ item }} state=started
+      register: ser
+      failed_when: "'Starting' not in ser.msg"
+      with_items:
+        - hadoop-0.20-mapreduce-jobtracker
+        - hadoop-hdfs-namenode
+        - hadoop-hdfs-secondarynamenode     
+
+- name: Provisioning  data node
+  hosts: hadoop-data*
+  user: "{{ user }}"
+  sudo: yes
+  tags: digital_ocean,ec2
+
+  tasks:
+
+    - name: Installing required packages
+      yum: name=hadoop-0.20-mapreduce-tasktracker,hadoop-hdfs-datanode,hadoop-client state=present
+
+    - name: starting services
+      service: name={{ item }} state=started
+      register: ser
+      with_items:
+        - hadoop-0.20-mapreduce-tasktracker
+        - hadoop-hdfs-datanode
+      failed_when: "'Starting' not in ser.msg"

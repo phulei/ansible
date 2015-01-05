@@ -1,0 +1,12 @@
+- name: Provision hadoop name node
+  local_action: digital_ocean state=present ssh_key_ids=261020 name={{ item }} api_key=23fe260589cf22b86fcc1e94d14d5011 image_id=3448641 size_id=66 region_id=8 client_id=daeb70a4a6875a3f6c0695cfc8001277
+  register: droplet
+  with_items:
+    - "hadoop-name"
+    - "hadoop-data"
+
+- debug: var=droplet
+
+- name: Add new instance to host group
+  add_host: hostname={{ item.droplet.ip_address }} groupname=launched instance_hostname={{ item.item }} user=root
+  with_items: droplet.results

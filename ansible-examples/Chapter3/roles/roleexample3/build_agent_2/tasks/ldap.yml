@@ -1,0 +1,95 @@
+---
+  - name: install openldap packages
+    yum: name={{ item }} state=latest
+    with_items:
+      - openldap-servers
+      - openldap-clients
+    tags:
+      - openldap_packages
+
+  - name: copy slapd.conf
+    copy: src=slapd.conf dest=/etc/openldap/slapd.conf owner=root group=root mode=0644
+
+  - name: delete contents of slapd directory
+    command: rm -rf /etc/openldap/slapd.d/* removes=/etc/openldap/slapd.d/*
+
+  - name: slaptest slapd.conf
+    shell: slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d
+
+  - name: copy all ldif files
+    copy: src={{ item.src }} dest=/etc/openldap/slapd.d/{{ item.dest }}
+    with_items:
+      - { src: "config.ldif", dest: "cn=config/olcDatabase={0}config.ldif" }
+      - { src: "monitor.ldif", dest: "cn=config/olcDatabase={1}monitor.ldif" }
+      - { src: "backend.apigee.com.ldif", dest: "backend.apigee.com.ldif" }
+      - { src: "frontend.apigee.com.ldif", dest: "frontend.apigee.com.ldif" }
+      - { src: "add_global_organizations_ou.ldif", dest: "add_global_organizations_ou.ldif" }
+    tags:
+      - copy_ldifs
+#    notify: restart slapd
+
+  - name: change ownership and mode
+    file: path=/etc/openldap/slapd.d state=directory owner=ldap group=ldap mode=0700 recurse=yes
+  
+  - name: start service slapd
+    service: name=slapd state=started enabled=yes
+
+  - name: restart service slapd
+    service: name=slapd state=restarted
+
+  - name: configure ldap core.ldif 
+    shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/core.ldif
+    ignore_errors: True
+    tags:
+      - configure_ldap_system
+
+  - name: configure cosine.ldif 
+    shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+    ignore_errors: True
+    tags:
+      - configure_ldap_system
+
+  - name: configure nis.ldif
+    shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+    ignore_errors: True
+    tags:
+      - configure_ldap_system
+
+  - name: configure inetorgperson.ldif
+    shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif 
+    ignore_errors: True
+    tags:
+      - configure_ldap_system
+  
+  - name: configure backend.apigee.com.ldif
+    shell: ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/slapd.d/backend.apigee.com.ldif
+    ignore_errors: True
+    tags:
+      - configure_ldap_custom
+
+  - name: configure frontend.apigee.com.ldif
+    shell: ldapadd -x -D cn=admin,dc=apigee,dc=com -w secret -f /etc/openldap/slapd.d/frontend.apigee.com.ldif
+    ignore_errors: True
+    tags:
+      - configure_ldap_custom
+
+  - name: configure add_global_organizations_ou.ldif
+    shell: ldapadd -x -D cn=admin,dc=apigee,dc=com -w secret -f /etc/openldap/slapd.d/add_global_organizations_ou.ldif
+    ignore_errors: True
+    tags:
+      - configure_ldap_custom
+
+  - name: check ldap configurations backend and frontend
+    shell:  ldapsearch -x -D cn=admin,dc=apigee,dc=com -w secret  -b "dc=apigee,dc=com"
+    tags:
+      - test_ldap
+
+  - name: check ldap configurations for ou=organizations
+    shell:  ldapsearch -x -D cn=admin,dc=apigee,dc=com -w secret  -b "ou=organizations,dc=apigee,dc=com"
+    tags:
+      - test_ldap
+
+  - name: check ldap configurations for ou=global
+    shell:  ldapsearch -x -D cn=admin,dc=apigee,dc=com -w secret  -b "ou=global,dc=apigee,dc=com"
+    tags:
+      - test_ldap

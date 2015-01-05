@@ -1,0 +1,33 @@
+--- 
+- name: install mysql server
+  yum: pkg={{ item }} state=present
+  with_items:
+    - mysql55-server
+
+- name: start mysqld server
+  service: name=mysqld state=started
+
+- name: update mysql root password for all root accounts
+  mysql_user: name=root host={{ item }} password={{ mysql_root_password }}
+  with_items:
+    - "{{ inventory_hostname }}"
+    - 127.0.0.1
+    - localhost
+
+- name: copy .my.cnf file with root password credentials
+  template: src=root/.my.cnf dest=/root/.my.cnf owner=root mode=0600
+
+- name: ensure anonymous users are not in the database
+  mysql_user: name='' host={{ item }} state=absent
+  with_items:
+    - localhost
+    - "{{ inventory_hostname }}"
+
+- name: remove the test database
+  mysql_db: name=test state=absent
+
+- name: create user in database
+  command: mysql -u root -p{{ mysql_root_password }} -e"GRANT ALL PRIVILEGES ON *.* TO 'rails'@'%' identified by '{{ rails_user_password }}'"
+
+- name: flush privileges
+  command: mysql -u root -p{{ mysql_root_password }} -e'FLUSH PRIVILEGES;'

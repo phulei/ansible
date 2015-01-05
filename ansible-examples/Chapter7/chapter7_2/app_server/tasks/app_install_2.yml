@@ -1,0 +1,27 @@
+---
+- name: Install rails rpm
+  yum: pkg=sample_app state=latest
+  sudo: yes
+       
+- name: Change permissions of folder
+  sudo: yes
+  file: path={{ app_dir }}_{{ app_version }} owner=ec2-user group=ec2-user recurse=yes state=directory
+
+- name: Setup database.yml
+  template: src=database.yml dest={{ app_dir }}_{{ app_version }}/config/database.yml owner=ec2-user group=ec2-user mode=0644
+
+- name: Set SECRET_KEY_BASE environment variable
+  template: src=secret.sh dest=/etc/profile.d/secret.sh owner=root group=ec2-user mode=0644
+  sudo: yes
+
+- name: Run rake db:create
+  shell: bundle exec /usr/local/bin/rake db:create RAILS_ENV={{ rails_env }} chdir={{ app_dir }}_{{ app_version }}
+  
+- name: Run rake db:migrate
+  shell: bundle exec /usr/local/bin/rake db:migrate RAILS_ENV={{ rails_env }} chdir={{ app_dir }}_{{ app_version }}
+
+- name: Setup unicorn.rb 
+  template: src=unicorn.rb dest={{ app_dir }}_{{ app_version }}/config/unicorn.rb owner=ec2-user group=ec2-user mode=0644
+
+- name: Start service
+  shell: bundle exec unicorn_rails -p {{ app_port }} -E {{ rails_env }} -c {{ app_dir }}_{{ app_version }}/config/unicorn.rb -d -D chdir={{ app_dir }}_{{ app_version }}

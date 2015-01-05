@@ -1,0 +1,16 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Stop httpd service
+      service: name=httpd state=stopped
+      tags:
+        - stop
+      sudo: yes
+ 
+    - name: Start httpd service
+      service: name=httpd state=started
+      tags:
+        - start
+      sudo: yes
+

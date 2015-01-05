@@ -1,0 +1,12 @@
+---
+package_name: “httpd”
+cassandra_path: /opt/apache-cassandra
+
+# Environment variables
+proxy_env:
+ AWS_ACCESS_KEY: "{{ lookup('env','ACCESS_KEY_ID') }}"
+ AWS_SECRET_KEY: "{{ lookup('env','SECRET_ACCESS_KEY') }}"
+
+# Default mount point
+mount_point: "/dev/sdf"
+

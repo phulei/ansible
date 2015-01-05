@@ -1,0 +1,23 @@
+#-*- mode: ruby -*-
+["apigee", "route53", "elb", "vagrant-awsinfo", "vagrant-managed-servers"].each do |plugin|
+  $LOAD_PATH << "/Users/Madhurranjan/Projects/vagrant/auto/planets/foo/plugins/#{plugin}/lib"
+   Vagrant.require_plugin plugin
+end
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos7docker"
+
+  config.vm.define :rails do |machine|
+    machine.vm.hostname = "rails"
+    machine.vm.network :private_network, ip: "192.168.33.18"
+    machine.vm.network "forwarded_port", guest: 80, host: 8080, id: "ssh", auto_correct: true
+   
+  end
+  
+  config.vm.define :db do |machine|
+    machine.vm.hostname = "db"
+    machine.vm.network :private_network, ip: "192.168.33.19"
+   
+  end
+  
+end

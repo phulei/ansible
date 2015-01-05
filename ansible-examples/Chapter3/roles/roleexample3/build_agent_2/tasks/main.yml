@@ -1,0 +1,6 @@
+- include: zookeeper.yml
+- include: cassandra.yml
+- include: ldap.yml
+- include: packages.yml
+- include: maven.yml
+#- include: jdk_modify.yml

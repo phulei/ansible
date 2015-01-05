@@ -1,0 +1,24 @@
+---
+  - name: remove java jdk
+    command: rpm -e jdk
+    ignore_errors: True
+    tags: 
+      - modify_rpm
+
+  - name: remove openjdk devel 
+    command: rpm -e java-1.7.0-openjdk-devel-1.7.0.19-2.3.9.1.el6_4.x86_64
+    ignore_errors: True
+    tags: 
+      - modify_rpm
+
+  - name: remove openjdk 
+    command: rpm -e java-1.7.0-openjdk-1.7.0.19-2.3.9.1.el6_4.x86_64
+    ignore_errors: True
+    tags: 
+      - modify_rpm
+
+  - name: install java jdk
+    command: rpm -i http://${fileserver}/${jdk6}
+    ignore_errors: True
+    tags: 
+      - modify_rpm

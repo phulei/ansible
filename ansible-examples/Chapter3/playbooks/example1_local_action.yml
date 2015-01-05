@@ -1,0 +1,18 @@
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+
+    - name: check running processes on remote system
+      shell: ps
+      register: remote_processes
+
+    - name: remote running processes
+      debug: msg="{{ remote_processes.stdout }}"
+
+    - name: check running processes on local system
+      local_action: shell ps
+      register: local_processes
+
+    - name: local running processes
+      debug: msg="{{ local_processes.stdout }}"
+

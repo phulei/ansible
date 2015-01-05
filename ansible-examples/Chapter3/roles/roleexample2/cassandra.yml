@@ -1,0 +1,7 @@
+- hosts: cassandra_nodes
+  user: vagrant
+  sudo: yes
+  roles:
+   - cassandra
+  tags:
+   - cassandra

@@ -1,0 +1,20 @@
+--- 
+- hosts: web
+  remote_user: vagrant
+  
+  tasks:
+    - name: Print environment specific url 
+      debug: msg={{ url }}
+
+    - name: Print mail server
+      debug: msg={{ mail_server }}
+
+- hosts: db
+  remote_user: vagrant
+  
+  tasks:
+    - name: Print environment specific db password
+      debug:  msg={{ db_password }}
+
+    - name: Print mail server
+      debug: msg={{ mail_server }}

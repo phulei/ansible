@@ -1,0 +1,27 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Update memcached configuration
+      template: src=memcached_web dest=/etc/sysconfig/memcached mode=644
+      sudo: yes
+      notify:
+        - restart memcached
+
+    - name: Create a virtual host
+      template: src=httpd_test.conf_web dest=/etc/httpd/conf/test.conf mode=644 validate='httpd -t -f %s'
+      sudo: yes     
+      notify:
+        - restart httpd
+        - restart memcached
+
+  handlers:
+
+    - name: restart httpd
+      service: name=httpd state=restarted
+      sudo: yes
+
+    - name: restart memcached
+      service: name=memcached state=restarted
+      sudo: yes
+

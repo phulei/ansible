@@ -1,0 +1,59 @@
+---
+  - name: create cassandra directory
+    file: dest={{ cassandra_base_directory }} state=directory owner=root group=root
+    tags:
+      - cassandra
+
+  - name: create cassandra user
+    user: name=cassandra comment="Cassandra user"
+    tags:
+      - cassandra
+   
+  - name: download cassandra
+    get_url: url=http://{{ fileserver }}/{{ cassandra_software }} dest={{ cassandra_base_directory }} thirsty=no
+    tags:
+      - cassandra
+
+  - name: untar cassandra
+    shell: cd {{ cassandra_base_directory }}; tar -zxvf {{ cassandra_software }} creates={{ cassandra_base_directory }}/{{ cassandra_directory }} ; chown -R cassandra {{ cassandra_base_directory }}/{{ cassandra_directory }}
+    tags:
+      - cassandra
+
+  - name: symlink cassandra
+    file: src={{ cassandra_base_directory }}/{{ cassandra_directory }} dest={{ cassandra_base_directory }}/apache-cassandra owner=cassandra state=link
+    tags:
+      - cassandra
+
+  - name: create cassandra directories
+    file: dest={{ item }} state=directory owner=cassandra
+    with_items:
+      - /var/log/cassandra
+      - /var/lib/cassandra
+    tags:
+      - cassandra
+
+  - name: setup cassandra yml
+    template: src=cassandra.yaml dest={{ cassandra_base_directory }}/{{ cassandra_directory }}/conf
+    tags:
+      - cassandra
+
+  - name: create cassandra group
+    group: name=cassandra state=present
+    tags:
+      - cassandra
+
+  - name: create cassandra user
+    user: name=cassandra comment="cassandra user" group=cassandra
+    tags:
+      - cassandra
+
+  - name: copy service init script to /etc/init.d
+    template: src=cassandra-init.d dest=/etc/init.d/cassandra owner=root group=root mode=0755
+    tags:
+      - cassandra
+    sudo: yes
+
+  - name: start cassandra service
+    service: name=cassandra state=started 
+    tags:
+      - cassandra

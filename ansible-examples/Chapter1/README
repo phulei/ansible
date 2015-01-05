@@ -1,0 +1,51 @@
+################################################################################
+
+Ad-hoc commands -
+
+$ ansible servers -m ping -i inventory -u ec2-user
+
+$ ansible servers -m shell -a '/bin/echo hello ansible' -i inventory -u ec2-user
+
+################################################################################
+
+setup_apache.yml -
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml
+
+List all tasks in a playbook - 
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml --list-tasks
+
+Starting Ansible run from a specific task -
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml --start-at-tasks='Starting httpd service'
+
+Running all tasks step-by-step with a prompt -
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml --step
+
+################################################################################
+
+apache.yml -
+
+$ ansible-playbook -i hosts playbooks/apache.yml -e "package_name=httpd"
+
+################################################################################
+
+setup_apache_all_hosts.yml -
+
+$ ansible-playbook -i hosts playbooks/setup_apache_all_hosts.yml
+
+################################################################################
+
+setup_apache_application_hosts.yml -
+
+$ ansible-playbook -i hosts playbooks/setup_apache_application_hosts.yml
+
+################################################################################
+
+setup_apache_eastcoast_hosts.yml -
+
+$ ansible-playbook -i hosts playbooks/setup_apache_eastcoast_hosts.yml
+
+################################################################################

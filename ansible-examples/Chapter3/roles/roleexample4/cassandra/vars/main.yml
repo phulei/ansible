@@ -1,0 +1,13 @@
+fileserver: 192.168.1.165
+jdk7: jdk-7u51-linux-x64.rpm
+jdk6: jdk-6u45-linux-amd64.rpm
+
+#Cassandra related variable configurations
+
+cassandra_software: apache-cassandra-1.2.11-bin.tar.gz
+cassandra_directory: apache-cassandra-1.2.11
+cassandra_lib_directory: /var/lib/cassandra
+cassandra_base_directory: /opt
+cluster_name: RegressionSanityCluster-1
+initial_token: 0
+rpc_address: 0.0.0.0

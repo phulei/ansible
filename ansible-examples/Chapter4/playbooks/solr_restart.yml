@@ -1,0 +1,20 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  gather_facts: no
+
+  tasks:
+
+    - name: Trying to obtain lock with the following lockname and lockvalue
+      debug: msg="lock name=lb/{{ load_balancer }} lock value={{ inventory_hostname }}"
+
+    - name: Locking {{ load_balancer }}
+      local_action: uri url=http://localhost:4001/v2/keys/lb/{{ load_balancer }}?prevExist=false method=PUT body="value={{ inventory_hostname }}" status_code=201 HEADER_Content-Type="application/x-www-form-urlencoded" return_content=yes
+
+    - name: Restarting solr
+      service: name=solr state=restarted
+      sudo: yes
+
+    - name: Unlocking {{ load_balancer }}
+      local_action: uri url=http://localhost:4001/v2/keys/lb/{{ load_balancer }} method=DELETE
+

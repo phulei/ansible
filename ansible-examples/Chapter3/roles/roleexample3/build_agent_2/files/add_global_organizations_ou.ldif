@@ -1,0 +1,22 @@
+#container for global
+dn: ou=global,dc=apigee,dc=com
+objectClass: organizationalUnit
+
+#container for global users
+#dn: ou=users,ou=global,dc=apigee,dc=com
+#objectClass: organizationalUnit
+#description: All global users in system
+
+#container for global roles
+#dn: ou=userroles,ou=global,dc=apigee,dc=com
+#objectClass: organizationalUnit
+
+#container for organizations
+dn: ou=organizations,dc=apigee,dc=com
+objectClass: organizationalUnit
+
+# sysadmin, userroles, global, apigee.com
+#dn: cn=sysadmin,ou=userroles,ou=global,dc=apigee,dc=com
+#objectClass: organizationalRole
+#cn: sysadmin
+

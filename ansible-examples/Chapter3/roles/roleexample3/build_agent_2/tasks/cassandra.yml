@@ -1,0 +1,15 @@
+---
+  - name: create cassandra directory
+    file: dest=${cassandra_base_directory} state=directory owner=root group=root
+   
+  - name: download cassandra
+    get_url: url=http://archive.apache.org/dist/cassandra/1.0.8/apache-cassandra-1.0.8-bin.tar.gz dest=${cassandra_base_directory} thirsty=no
+
+  - name: untar cassandra
+    shell: cd ${cassandra_base_directory}; tar -zxvf ${cassandra_software} creates=${cassandra_base_directory}/${cassandra_directory}
+
+  - name: setup cassandra yml
+    template: src=cassandra.yaml dest=${cassandra_base_directory}/${cassandra_directory}/conf
+
+  - name: symlink cassandra
+    file: src=${cassandra_base_directory}/${cassandra_directory} dest=${cassandra_base_directory}/apache-cassandra owner=root group=root state=link

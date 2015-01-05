@@ -1,0 +1,27 @@
+#Zookeeper related variable configurations
+
+zookeeper_software: zookeeper-3.4.5.tar.gz
+zookeeper_directory: zookeeper-3.4.5
+zookeeper_base_directory: /localdisk/zk
+tickTime: 60000
+dataDir: /var/zookeeper
+
+#Cassandra related variable configurations
+
+cassandra_software: apache-cassandra-1.0.8-bin.tar.gz
+cassandra_directory: apache-cassandra-1.0.8
+cassandra_base_directory: /localdisk/zk
+cluster_name: RegressionSanityCluster-1
+initial_token: 0
+rpc_address: 0.0.0.0
+
+#Ldap conf
+slapd_conf: /etc/openldap/slapd.conf
+
+#download url maven
+maven_url: "http://10.141.11.207/apache-maven-3.0.5-bin.tar.gz"
+maven_software: apache-maven-3.0.5-bin.tar.gz
+maven_directory: apache-maven-3.0.5
+fileserver: 10.141.11.207
+jdk7: jdk-7u25-linux-x64.rpm
+jdk6: jdk-1.6.0_45-fcs-linux-amd64.rpm

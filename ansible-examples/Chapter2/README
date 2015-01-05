@@ -1,0 +1,91 @@
+################################################################################
+
+Provisioning in Vagrant using Ansible - 
+
+$ vagrant up
+
+$ vagrant provision
+
+################################################################################
+
+setup_apache.yml (syntax-check)- 
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml --syntax-check
+
+################################################################################
+
+setup_apache.yml (check mode)-
+
+$ ansible-playbook -i hosts playbooks/setup_apache.yml --check
+
+################################################################################
+
+diff_example.yml -
+
+# Change the path of the httpd.conf_web file in the playbook
+
+$ ansible-playbook -i hosts playbooks/diff_example.yml  --check --diff
+
+################################################################################
+
+assert_example.yml -
+
+$ ansible-playbook -i hosts playbooks/assert_example.yml -vv
+
+################################################################################
+
+tags_example.yml -
+
+$ ansible-playbook -i hosts playbooks/tags_example.yml --tags stop
+
+################################################################################
+
+multiple_tags_example.yml -
+
+$ ansible-playbook -i hosts playbooks/multiple_tags_example.yml --tags pre_check,start
+
+$ ansible-playbook -i hosts playbooks/multiple_tags_example.yml --skip-tags stop
+
+################################################################################
+
+installation.yml -
+
+$ ansible-playbook -i hosts playbooks/installation.yml --tags install
+
+################################################################################
+
+installation_test.yml -
+
+$ ansible-playbook -i hosts playbooks/installation_test.yml --tags install
+
+################################################################################
+
+Serverspec example
+
+$ sudo gem install serverspec --no-ri --no-rdoc
+$ vagrant provision  # To make sure the setup is complete and configured
+$ rake -T
+rake serverspec        # Run serverspec on all hosts
+rake serverspec:host1  # Run serverspec to host1
+$ rake serverspec
+
+################################################################################
+playbook_tester. Playbook tester requires playbooks, spec and Vagrantfile to be 
+in one directory. Hence we've copied the same playbooks into the example1 directory.
+
+$ ./playbook_tester example1
+
+################################################################################
+
+A single stable branch with multiple folders -
+
+# To run the below playbook, change the working directory to environments
+
+$ cd environments
+
+$ ansible-playbook -i stage/inventory playbook.yml
+
+$  ansible-playbook -i production/inventory playbook.yml
+
+
+################################################################################

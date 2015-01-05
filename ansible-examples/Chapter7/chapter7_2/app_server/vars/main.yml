@@ -1,0 +1,7 @@
+---
+rails_user_password: "{{ lookup('env','RAILS_USER_PASSWORD') }}"
+secret_base: "{{ lookup('env','SECRET_KEY_BASE') }}"
+rails_env: production
+app_dir: /opt/sample_app
+app_port: 3000
+server_name: sample_app

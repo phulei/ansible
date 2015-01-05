@@ -1,0 +1,5 @@
+[apigee]
+name=Apigee Edge
+baseurl=http://rajesh:rajesh123@ap-repo.dev.apigeeks.net/autoplanet/centos6/x86_64/
+gpgcheck=0
+enabled=1

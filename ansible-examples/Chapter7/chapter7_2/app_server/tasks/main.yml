@@ -1,0 +1,4 @@
+---
+- include: pre_requisites_2.yml
+- include: app_install_2.yml
+- include: nginx.yml

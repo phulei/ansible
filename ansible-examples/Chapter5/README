@@ -1,0 +1,37 @@
+################################################################################
+
+Testing Python modules -
+
+$ python library/check_user arguments
+
+################################################################################
+
+check_user.yml -
+
+$ ansible-playbook -i hosts playbooks/check_user.yml -e "user=foo" -M library
+
+################################################################################
+
+Testing python modules using test-module script -
+
+# To test the module, please download the test-module script from https://github.com/ansible/ansible
+
+$ ansible/hacking/test-module -m library/check_user -a "user=foo"
+
+$ ansible/hacking/test-module -m library/check_users -a "user=foo"
+
+$ ansible/hacking/test-module -m library/check_users_id -a "user=foo"
+
+################################################################################
+
+Testing bash modules -
+
+$ bash library/kill_java_process arguments
+
+################################################################################
+
+Testing ruby modules -
+
+$ ruby library/rsync arguments
+
+################################################################################

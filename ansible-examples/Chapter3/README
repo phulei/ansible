@@ -1,0 +1,124 @@
+################################################################################
+
+example1_local_action.yml -
+
+$ ansible-playbook playbooks/example1_local_action.yml -i hosts
+
+################################################################################
+
+example1_qod.yml -
+
+$ ansible-playbook playbooks/example1_qod.yml -i hosts
+
+################################################################################
+
+example1_install_httpd_server.yml -
+
+$ ansible-playbook playbooks/example1_install_httpd_server.yml -i hosts
+
+################################################################################
+
+example1_check_sudo_access.yml -
+
+$ ansible-playbook playbooks/example1_check_sudo_access.yml -i hosts
+
+################################################################################
+
+example1_with_items_loop.yml -
+
+$ ansible-playbook playbooks/example1_with_items_loop.yml -i hosts
+
+################################################################################
+
+example1_with_nested.yml - 
+
+$ ansible-playbook playbooks/example1_with_nested.yml -i hosts
+
+################################################################################
+
+example1_with_subelements.yml -
+
+$ ansible-playbook playbooks/example1_with_subelements.yml -i hosts
+
+################################################################################
+
+example3.yml -
+
+$ ansible-playbook playbooks/example3.yml -i hosts
+
+################################################################################
+
+example1_handlers_example.yml -
+
+$ ansible-playbook playbooks/example1_handlers_example.yml -i hosts
+
+################################################################################
+
+example1_multiple_handlers_example.yml -
+
+$ ansible-playbook playbooks/example1_multiple_handlers_example.yml -i hosts
+
+################################################################################
+Roles
+build agent role example -
+
+$ cd roles/roleexample1
+$ vagrant up --no-provision(so that you can run ansible-playbook explicitly)
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key site.yml
+(Run vagrant provision when required)
+$ vagrant provision
+$ rake serverspec
+
+################################################################################
+cassandra role example -
+
+$ cd roles/roleexample2
+$ vagrant up --no-provision(so that you can run ansible-playbook explicitly)
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key cassandra.yml
+
+################################################################################
+Both roles in site.yml : 
+
+$ cd roles/roleexample3
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key site.yml
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key cassandra.yml --list-tasks
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key site.yml --list-tasks
+
+################################################################################
+Running roles with tags-
+
+$ cd roles/roleexample3
+$ vagrant up --no-provision(so that you can run ansible-playbook explicitly)
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key site.yml --tags="build_agent"
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key cassandra.yml --tags="cassandra"
+
+################################################################################
+
+Roles : meta role and handlers - 
+$ cd roles/roleexample4
+$ vagrant up --no-provision(so that you can run ansible-playbook explicitly)
+$ ansible-playbook -i inventory --private-key ~/.ssh/ansible_key build_agent.yml 
+
+################################################################################
+ansible-vault create password -
+
+$ ansible-vault create passwords.yml
+
+
+ansible-vault edit password -
+
+$ ansible-vault edit passwords.yml
+
+ansible-vault decrypt password -
+
+$ ansible-vault decrypt passwords.yml
+
+encrypt a file -
+
+$ ansible-vault encrypt importantfile --vault-password-file .password
+
+decrypt a file -
+
+$ ansible-vault decrypt importantfile --vault-password-file .password
+
+################################################################################

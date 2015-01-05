@@ -1,0 +1,8 @@
+---
+- hosts: default
+  remote_user: ec2-user #vagrant
+  sudo: yes
+  tasks:
+    - name: Test message
+      debug: msg="hello"
+

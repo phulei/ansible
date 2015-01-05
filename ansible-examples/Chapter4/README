@@ -1,0 +1,49 @@
+################################################################################
+
+solr_restart.yml -
+
+$ ansible-playbook playbooks/solr_restart.yml -i hosts -e "load_balancer=lb001"
+
+################################################################################
+
+solr_restart_rollback.yml -
+
+$ ansible-playbook playbooks/solr_restart_rollback.yml -i hosts -e "load_balancer=lb001"
+
+################################################################################
+
+callback plugins -
+
+$ ansible-playbook -i hosts ../Chapter3/roles/roleexample3/build_agent.yml
+
+################################################################################
+
+mail_alert.yml -
+
+$ ansible-playbook -i hosts playbooks/mail_alert.yml
+
+################################################################################
+
+hipchat_alert.yml -
+
+$ ansible-playbook -i hosts playbooks/hipchat_alert.yml
+
+################################################################################
+
+nagios_mysql_dump.yml - 
+
+$ ansible-playbook -i hosts playbooks/nagios_mysql_dump.yml
+
+################################################################################
+
+callback_sample.py (play.yml) -
+
+$ ansible-playbook -i hosts playbooks/play.yml
+
+################################################################################
+
+
+
+
+
+################################################################################

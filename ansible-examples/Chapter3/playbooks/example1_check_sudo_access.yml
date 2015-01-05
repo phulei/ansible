@@ -1,0 +1,13 @@
+---  
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Testing user sudo privilege
+      command: /usr/bin/sudo -v
+      register: sudo_response
+      ignore_errors: yes
+    
+    - name: Stop further if User doesn't have sudo privilege
+      fail: msg="User doesn't have sudo privilege."
+      when: sudo_response.rc != 0
+

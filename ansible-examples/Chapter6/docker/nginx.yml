@@ -1,0 +1,7 @@
+---
+- hosts: docker
+  user: vagrant
+  sudo: yes
+  roles:
+   - install_docker
+   - nginx

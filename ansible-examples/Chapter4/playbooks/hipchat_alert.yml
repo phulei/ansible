@@ -1,0 +1,33 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  gather_facts: no
+  vars:
+    users:
+      - name: alice
+        database:
+          - clientdb
+          - employeedb
+          - providerdb
+      - name: bob
+        database:
+          - clientdb
+
+  tasks:
+    - name: give users access to multiple databases
+      mysql_user: name={{ item.0.name }} priv={{ item.1 }}.*:ALL append_privs=yes password=foo login_user=root login_password=root
+      register: mysql
+      with_subelements:
+        - users
+        - database
+
+    - name: Sending mail to user
+      local_action: mail
+                    host='127.0.0.1'
+                    subject="[Ansible] All task completed for mail_alert playbook"
+                    body="Hello, Ansible has done its job and its time for you to perform your duty"
+                    from="ansible@yourmail.com"
+                    to="you@yourmail.com"
+
+    - name: Notifying on hipchat
+      hipchat: token=330051dcbc85abeed524d428e7c5d5 room=ops msg="Hello, Ansible has done its job and its time for you to perform your duty" from="Ansible"

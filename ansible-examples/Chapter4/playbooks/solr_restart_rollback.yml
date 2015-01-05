@@ -1,0 +1,24 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  gather_facts: no
+
+  tasks:
+
+    - name: Checking if {{ load_balancer }} is already locked
+      local_action: uri url=http://localhost:4001/v2/keys/lb/{{ load_balancer }}
+      register: elb_lock
+      ignore_errors: true
+
+    - name: Restarting solr
+      service: name=solr state=started
+      sudo: yes
+      ignore_errors: true
+      when: elb_lock.status == 200
+
+    - name: Unlocking {{ load_balancer }}
+      local_action: uri url=http://localhost:4001/v2/keys/lb/{{ load_balancer }} method=DELETE
+      when: elb_lock.value == "{{ inventory_hostname }}"
+      when: elb_lock.status == 200
+      ignore_errors: true
+

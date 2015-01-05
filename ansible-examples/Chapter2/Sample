@@ -1,0 +1,32 @@
+Virtualbox:
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos"
+  config.vm.provider :virtualbox do |provider, override|
+  end
+  config.vm.define :test do |machine|
+    machine.vm.hostname = "test"
+    machine.vm.network "forwarded_port", guest: 22, host: 2220, id: "ssh", auto_correct: true
+    machine.vm.network "private_network", ip: "192.168.33.11"
+  end
+end
+	
+AWS:
+Vagrant.configure("2") do |config|
+  config.vm.box = "aws"
+  config.vm.provider :aws do |provider, override|
+    provider.access_key_id = "<access key>"
+    provider.secret_access_key = "<secret key>"
+    provider.keypair_name = "<keypair name>"
+    provider.instance_ready_timeout = 300  # seconds
+    provider.instance_type = "< instance type>"
+    provider.ami = "ami-94cd60fd"
+    provider.region = "us-east-1"
+    override.ssh.username = "ec2-user"
+    override.ssh.private_key_path = "~/.ssh/DevopsAdminEast.pem"
+  end
+  config.vm.define :test do |machine|
+    machine.vm.hostname = "test"
+    machine.vm.network "forwarded_port", guest: 22, host: 2220, id: "ssh", auto_correct: true
+  end
+end
+

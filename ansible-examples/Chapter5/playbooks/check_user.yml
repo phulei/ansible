@@ -1,0 +1,7 @@
+---  
+-   hosts: web001 
+    remote_user: ec2-user
+    gather_facts: no
+    tasks:
+      - name: Checking if user {{ user }} exists
+        check_user: user={{ user }}

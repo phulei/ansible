@@ -1,0 +1,14 @@
+---  
+- hosts: web001
+  remote_user: ec2-user
+  tasks:
+    - name: Install httpd package
+      yum: name=httpd state=latest
+      sudo: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: Install apache2 package
+      yum: name=apache2 state=latest
+      sudo: yes
+      when: ansible_os_family == "Debian"
+

@@ -1,0 +1,22 @@
+---
+- hosts: web001
+  remote_user: ec2-user
+  gather_facts: no
+  vars:
+    users:
+      - name: alice
+        database:
+          - clientdb
+          - employeedb
+          - providerdb
+      - name: bob
+        database:
+          - clientdb
+
+  tasks:
+    - name: give users access to multiple databases
+      mysql_user: name={{ item.0.name }} priv={{ item.1 }}.*:ALL append_privs=yes password=foo login_user=root login_password=root
+      with_subelements:
+        - users
+        - database
+

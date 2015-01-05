@@ -1,0 +1,25 @@
+---
+- name: Install mysql libs package
+  yum: name=mysql55-libs state=latest
+  sudo: yes
+
+- name: Install required system gems
+  gem: name={{ item }} state=present user_install=no
+  sudo: yes
+  with_items:
+    - bundler
+    - rake
+
+- name : Check if internal.repo exists
+  stat: path=/etc/yum.repos.d/internal.repo
+  register: repo
+
+- name: Add internal yum repo
+  copy: src=internal.repo dest=/etc/yum.repos.d/internal.repo owner=root group=root mode=0644
+  when: repo.stat.exists != true
+  sudo: yes
+
+- name: Run makecache
+  shell: yum makecache
+  when: repo.stat.exists != true
+  sudo: yes

@@ -1,0 +1,23 @@
+- name: Remove older version of tomcat
+  file: path=/usr/local/tomcat state=absent
+
+- name: Download Tomcat
+  get_url: url={{ tomcat_url }} dest=/tmp
+
+- name: Extract archive
+  command: chdir=/tmp /bin/tar xvf apache-tomcat-{{ tomcat_version }}.tar.gz
+
+- name: Copy tomcat folder
+  command: creates=/usr/local/tomcat mv /tmp/apache-tomcat-{{ tomcat_version }}/ /usr/local/tomcat
+  sudo: yes
+
+- name: Start Tomcat
+  command: nohup /usr/local/tomcat/bin/startup.sh &
+  sudo: yes
+
+- name: Wait for port 8080
+  wait_for: host=0.0.0.0 port=8080 
+
+- name: Download sample tomcat app
+  get_url: url={{ tomcat_app }} dest=/usr/local/tomcat/webapps
+
