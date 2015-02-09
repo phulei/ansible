@@ -1,4 +1,5 @@
 ---
 - hosts: localhost
   tasks:
-  - shell: echo 'Prueba mega-basica'
+  - shell: echo 'Upgrade System'
+  - apt: upgrade=dist
