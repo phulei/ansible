@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
   tasks:
-  - shell: echo 'Upgrade System'
-  - apt: upgrade=dist
+   - name: Update apt cache
+     apt: update_cache=yes cache_valid_time=120 
+   - name: dist-upgrade
+     apt: upgrade=full 
