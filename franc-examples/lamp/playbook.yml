@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+    - name: 1. install Apache
+      apt: name=apache2 state=present
+
+    - name: 2. install PHP module for Apache
+      apt: name=libapache2-mod-php5 state=present
+
+    - name: 3. start Apache
+      service: name=apache2 state=running enabled=yes
+
+    - name: 4. install phpinfo
+      copy: src=index.php dest=/var/www/index.php mode=0664
+
+    - name: 5. Install MariaDB server package
+      apt: name=mysql-server state=present
+
+    - name: 6. Start Mysql Service
+      service: name=mysql state=started enabled=true
+
+    - name: 7. Install MySQL extension for PHP
+      apt: name=php5-mysql state=present
