@@ -13,7 +13,7 @@
     - name: 4. install phpinfo
       copy: src=index.php dest=/var/www/index.php mode=0664
 
-    - name: 5. Install MariaDB server package
+    - name: 5. Install Mysqlserver package
       apt: name=mysql-server state=present
 
     - name: 6. Start Mysql Service
@@ -21,3 +21,11 @@
 
     - name: 7. Install MySQL extension for PHP
       apt: name=php5-mysql state=present
+
+    - name: 8. Install other PHP extensions
+      action: apt pkg={{item}} state=installed
+      with_items:
+      - php-db 
+      - php-pear
+      - php5-gd
+      - php5-mcrypt
