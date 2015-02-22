@@ -29,3 +29,4 @@
       - php-pear
       - php5-gd
       - php5-mcrypt
+      - phpmyadmin
